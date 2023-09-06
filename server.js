@@ -16,11 +16,11 @@ app.use(cookieParser());
 app.use(cors());
 
 const conn = mysql.createConnection({
-  host: "bxbfyhoo9mcabwvbhtjj-mysql.services.clever-cloud.com",
+  host: "boisuoy93xsqcibmhs9l-mysql.services.clever-cloud.com",
   user: "uyicpocoftwgulf0",
-  password: "gJf0CQHHd5C9Dfqu39l4",
+  password: "BhsbwOArFWPoBjxKdrcP",
   port:"3306",
-  database: "bxbfyhoo9mcabwvbhtjj",
+  database: "boisuoy93xsqcibmhs9l",
 });
 
 conn.connect((err) => {
