@@ -74,7 +74,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.post("/uploadImage", upload.single("image"), (req, res) => {
+app.post("/api/uploadImage", upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
@@ -83,7 +83,7 @@ app.post("/uploadImage", upload.single("image"), (req, res) => {
   res.status(200).json({ imageName: imagePath });
 });
 
-app.get("/checkImageExists/:imageName", (req, res) => {
+app.get("/api/checkImageExists/:imageName", (req, res) => {
   const imageName = req.params.imageName;
   const imagePath = path.join(
     __dirname,
@@ -102,7 +102,7 @@ app.get("/checkImageExists/:imageName", (req, res) => {
   });
 });
 
-app.get("/userData", withAuth, (req, res) => {
+app.get("/api/userData", withAuth, (req, res) => {
   const userEmail = req.email;
   const sql = `
     SELECT first_name, last_name
@@ -122,7 +122,7 @@ app.get("/userData", withAuth, (req, res) => {
   });
 });
 
-app.post("/register", (req, res) => {
+app.post("/api/register", (req, res) => {
   const { email, password } = req.body;
   const sql = `SELECT id FROM users WHERE email = ?`;
   conn.query(sql, [email], (err, emailResults) => {
@@ -155,7 +155,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-app.post("/login", function (req, res) {
+app.post("/api/login", function (req, res) {
   const { email, password } = req.body;
 
   conn.query(`SELECT * FROM users WHERE email="${email}"`, (err, result) => {
@@ -203,13 +203,13 @@ app.post("/login", function (req, res) {
   });
 });
 
-app.post("/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   res.clearCookie("token");
   res.status(200).send("Logged out successfully");
   return;
 });
 
-app.get("/vacations", (req, res) => {
+app.get("/api/vacations", (req, res) => {
   const sql = "SELECT * FROM vacations";
   conn.query(sql, (err, results) => {
     if (err) {
@@ -221,7 +221,7 @@ app.get("/vacations", (req, res) => {
   });
 });
 
-app.post("/toggleFavorite", withAuth, (req, res) => {
+app.post("/api/toggleFavorite", withAuth, (req, res) => {
   const userEmail = req.email;
   const { vacationId } = req.body;
   const sql = `SELECT id FROM users WHERE email = ?`;
@@ -266,7 +266,7 @@ app.post("/toggleFavorite", withAuth, (req, res) => {
   });
 });
 
-app.get("/favoriteVacations", withAuth, (req, res) => {
+app.get("/api/favoriteVacations", withAuth, (req, res) => {
   const userEmail = req.email;
   const sql = `
     SELECT vacation_id
@@ -286,7 +286,7 @@ app.get("/favoriteVacations", withAuth, (req, res) => {
   });
 });
 
-app.get("/vacationFollowersCount", (req, res) => {
+app.get("/api/vacationFollowersCount", (req, res) => {
   const sql = `
     SELECT vacation_id, COUNT(*) AS followers_count
     FROM followers
@@ -309,7 +309,7 @@ app.get("/vacationFollowersCount", (req, res) => {
   });
 });
 
-app.get("/followersCount", (req, res) => {
+app.get("/api/followersCount", (req, res) => {
   const sql = `
     SELECT v.id, v.destination, COUNT(f.vacation_id) AS followers_count
     FROM vacations v
@@ -330,7 +330,7 @@ app.get("/followersCount", (req, res) => {
   });
 });
 
-app.delete("/vacations/:id", withAuth, (req, res) => {
+app.delete("/api/vacations/:id", withAuth, (req, res) => {
   const vacationId = req.params.id;
   const sql = "DELETE FROM vacations WHERE id = ?";
   conn.query(sql, [vacationId], (err) => {
@@ -343,7 +343,7 @@ app.delete("/vacations/:id", withAuth, (req, res) => {
   });
 });
 
-app.get("/vacations/:id", (req, res) => {
+app.get("/api/vacations/:id", (req, res) => {
   const vacationId = req.params.id;
   const sql = "SELECT * FROM vacations WHERE id = ?";
   conn.query(sql, [vacationId], (err, results) => {
@@ -360,7 +360,7 @@ app.get("/vacations/:id", (req, res) => {
   });
 });
 
-app.put("/vacations/:id", (req, res) => {
+app.put("/api/vacations/:id", (req, res) => {
   const vacationId = req.params.id;
   const updatedData = req.body;
 
