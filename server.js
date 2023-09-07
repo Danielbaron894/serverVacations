@@ -15,13 +15,13 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
-const port = procces.env.PORT || 3306
+
 
 const conn = mysql.createConnection({
   host: "boisuoy93xsqcibmhs9l-mysql.services.clever-cloud.com",
   user: "upzzc6at1hkcqflj",
   password: "BhsbwOArFWPoBjxKdrcP",
-  port: port,
+  port: 3306,
   database: "boisuoy93xsqcibmhs9l",
 });
 
