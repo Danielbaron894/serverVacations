@@ -33,7 +33,7 @@ conn.connect((err) => {
   }
 });
 
-app.post("api/vacations", (req, res) => {
+app.post("/api/vacations", (req, res) => {
   const newVacation = req.body;
   const sql = `
     INSERT INTO vacations (description, destination, start_date, end_date, image_name, price)
