@@ -122,38 +122,33 @@ app.get("/api/userData", withAuth, (req, res) => {
   });
 });
 
-app.post('/api/register', (req, res) => {
-  const { email, password, firstName, lastName} = req.body;
-  const sql = `SELECT id FROM users WHERE email = ?`;
-  conn.query(sql, [email], (err, emailResults) => {
-    if (err) {
-      console.error("Error checking email:", err);
-      res.status(500).json({ error: "Error checking email" });
-    } else if (emailResults.length > 0) {
-      res.status(400).json({ error: "Email already registered" });
-    } else {
-      bcrypt.hash(password, 10, function (err, hash) {
-        if (err) {
-          console.error("Error hashing password:", err);
-          res.status(500).json({ error: "Error hashing password" });
-          return;
-        }
-        conn.query(
-          `INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)`,
-          [email, hash, firstName, lastName],
-          (err, result) => {
-            if (err) {
-              console.error("Error registering user:", err);
-              res.status(500).json({ error: "Error registering user" });
-              return;
-            }
-            console.log(result);
-            res.status(200).send("Thanks for registering");
-          }
-        );
-      });
+app.post('/api/register', async (req, res) => {
+  const { email, password, firstName, lastName } = req.body;
+
+  try {
+    // Check if the email already exists in the database
+    const emailResults = await conn.query('SELECT id FROM users WHERE email = ?', [email]);
+
+    if (emailResults.length > 0) {
+      return res.status(400).json({ error: "Email already registered" });
     }
-  });
+
+    // Hash the password securely
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert the user's information into the database
+    const result = await conn.query(
+      'INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)',
+      [email, hashedPassword, firstName, lastName]
+    );
+
+    console.log(result);
+
+    return res.status(200).json({ message: "Thanks for registering" });
+  } catch (err) {
+    console.error("Error registering user:", err);
+    return res.status(500).json({ error: "Error registering user" });
+  }
 });
 
 app.post("/api/login", function (req, res) {
