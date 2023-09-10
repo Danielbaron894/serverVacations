@@ -122,7 +122,7 @@ app.get("/api/userData", withAuth, (req, res) => {
   });
 });
 
-app.post("/api/register", (req, res) => {
+app.post('/api/register', (req, res) => {
   const { email, password, firstName, lastName} = req.body;
   const sql = `SELECT id FROM users WHERE email = ?`;
   conn.query(sql, [email], (err, emailResults) => {
