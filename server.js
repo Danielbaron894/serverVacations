@@ -15,12 +15,14 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
+
+
 const conn = mysql.createConnection({
-  host: "bxbfyhoo9mcabwvbhtjj-mysql.services.clever-cloud.com",
-  user: "uyicpocoftwgulf0",
-  password: "gJf0CQHHd5C9Dfqu39l4",
-  port:"3306",
-  database: "bxbfyhoo9mcabwvbhtjj",
+  host: "boisuoy93xsqcibmhs9l-mysql.services.clever-cloud.com",
+  user: "upzzc6at1hkcqflj",
+  password: "BhsbwOArFWPoBjxKdrcP",
+  port: 3306,
+  database: "boisuoy93xsqcibmhs9l",
 });
 
 conn.connect((err) => {
@@ -121,7 +123,7 @@ app.get("/api/userData", withAuth, (req, res) => {
 });
 
 app.post("/api/register", (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password } = req.body;
   const sql = `SELECT id FROM users WHERE email = ?`;
   conn.query(sql, [email], (err, emailResults) => {
     if (err) {
@@ -137,8 +139,7 @@ app.post("/api/register", (req, res) => {
           return;
         }
         conn.query(
-          `INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)`,
-          [email, hash, firstName, lastName],
+          `INSERT INTO users (email, password) VALUES ("${email}", "${hash}")`,
           (err, result) => {
             if (err) {
               console.error("Error registering user:", err);
