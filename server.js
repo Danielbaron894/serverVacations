@@ -122,8 +122,8 @@ app.get("/api/userData", withAuth, (req, res) => {
   });
 });
 
-app.post('/api/register', (req, res) => {
-  const { firstName,lastName,email, password } = req.body;
+app.post("/api/register", (req, res) => {
+  const { email, password, firstName, lastName} = req.body;
   const sql = `SELECT id FROM users WHERE email = ?`;
   conn.query(sql, [email], (err, emailResults) => {
     if (err) {
@@ -139,8 +139,8 @@ app.post('/api/register', (req, res) => {
           return;
         }
         conn.query(
-          `INSERT INTO users (first_name, last_name, email, password ) VALUES (?, ?, ?, ?)`,
-          [firstName, lastName,email, password],
+          `INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)`,
+          [email, hash, firstName, lastName],
           (err, result) => {
             if (err) {
               console.error("Error registering user:", err);
