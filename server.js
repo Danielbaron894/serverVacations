@@ -128,9 +128,9 @@ app.post("/api/register", (req, res) => {
   conn.query(sql, [email], (err, emailResults) => {
     if (err) {
       console.error("Error checking email:", err);
-      res.status(500).json({ error: "Error checking email" });
+      res.status(500).json({ error: "Error checking email", err: err.message });
     } else if (emailResults.length > 0) {
-      res.status(400).json({ error: "Email already registered" });
+      res.status(400).json({ error: "Email already registered", err: err.message });
     } else {
       bcrypt.hash(password, 10, function (err, hash) {
         if (err) {
