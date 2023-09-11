@@ -139,8 +139,8 @@ app.post('/api/register', (req, res) => {
           return;
         }
         conn.query(
-          `INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)`,
-          [email, hash, firstName, lastName],
+          `INSERT INTO users (first_name, last_name, email, password ) VALUES (?, ?, ?, ?)`,
+          [firstName, lastName,email, hash],
           (err, result) => {
             if (err) {
               console.error("Error registering user:", err);
