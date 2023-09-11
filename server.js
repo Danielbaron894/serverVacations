@@ -139,12 +139,12 @@ app.post("/api/register", (req, res) => {
           return;
         }
         conn.query(
-          `INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)`,
-          [email, hash, firstName, lastName],
+          `INSERT INTO users (email, password, first_name, last_name, role) VALUES (?, ?, ?, ?,?)`,
+          [email, hash, firstName, lastName,1],
           (err, result) => {
             if (err) {
               console.error("Error registering user:", err);
-              res.status(500).json({ error: "Error registering user" });
+              res.status(500).json({ error: err.message });
               return;
             }
             console.log(result);
